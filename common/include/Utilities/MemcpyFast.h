@@ -15,9 +15,26 @@
 
 #pragma once
 
-#ifdef __linux__
+#ifdef __APPLE__
+
+// OSX has a pretty good, vectorized libc implementation, let's go with that
+// instead of adding extra complexity. Bonus points for memcmp being an
+// intrinsic in many compilers.
+
 #	include "lnx_memzero.h"
+#	define memcmp_mmx memcmp
+
+#elif defined(__linux__)
+
+#	include "lnx_memzero.h"
+
+	extern "C" void __fastcall memcpy_amd_(void *dest, const void *src, size_t bytes);
+	extern "C" u8 memcmp_mmx(const void* src1, const void* src2, int cmpsize);
+	extern "C" void memxor_mmx(void* dst, const void* src1, int cmpsize);
+	extern void memcpy_amd_qwc(void *dest, const void *src, size_t bytes);
+
 #else
+
 #	include "win_memzero.h"
 #endif
 
@@ -34,7 +51,7 @@ void _memset16_unaligned( void* dest, u16 data, size_t size );
 
 #define memcpy_fast					memcpy
 #define memcpy_aligned(d,s,c)		memcpy(d,s,c)
-#define memcpy_const					memcpy
+#define memcpy_const				memcpy
 #define memcpy_constA				memcpy
 #define memcpy_qwc_					memcpy
 #define memcpy_qwc(d,s,c)			memcpy(d,s,c*16)

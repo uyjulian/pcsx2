@@ -29,9 +29,9 @@ else()
     list(APPEND wxWidgets_CONFIG_OPTIONS --version=3.0)
 endif()
 
-if(GTK3_API)
+if(GTK3_API AND NOT APPLE)
     list(APPEND wxWidgets_CONFIG_OPTIONS --toolkit=gtk3)
-else()
+elseif(NOT APPLE)
     list(APPEND wxWidgets_CONFIG_OPTIONS --toolkit=gtk2)
 endif()
 
@@ -66,8 +66,11 @@ include(FindLibc)
 
 ## Use CheckLib package to find module
 include(CheckLib)
-if(Linux)
-    check_lib(AIO aio libaio.h)
+if(APPLE)
+    # OSX has POSIX AIO builtin to its Libc, header: /usr/include/aio.h
+    set(AIO_FOUND 1)
+else()
+    check_lib(AIO aio aio.h)
 endif()
 check_lib(EGL EGL EGL/egl.h)
 check_lib(GLESV2 GLESv2 GLES3/gl3ext.h) # NOTE: looking for GLESv3, not GLESv2

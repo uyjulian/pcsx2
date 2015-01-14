@@ -222,7 +222,7 @@ set(DEFAULT_WARNINGS "-Wall -Wno-attributes -Wno-missing-field-initializers -Wno
 # -Wstrict-aliasing=n: to fix one day aliasing issue. n=1/2/3
 set(AGGRESSIVE_WARNING "-Wstrict-aliasing -Wstrict-overflow=4 ")
 
-if (USE_CLANG)
+if (USE_CLANG AND NOT APPLE)
     # -Wno-deprecated-register: glib issue...
     set(DEFAULT_WARNINGS "${DEFAULT_WARNINGS}  -Wno-deprecated-register")
     set(COMMON_FLAG "${COMMON_FLAG} -no-integrated-as")
