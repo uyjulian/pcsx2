@@ -7,12 +7,17 @@ if(LIBC_LIBRARIES)
     set(LIBC_FIND_QUIETLY TRUE)
 endif(LIBC_LIBRARIES)
 
-if(NOT APPLE)
-    find_library(librt NAMES rt)
+# TODO OSX see if rt on Linux needed really
+if(APPLE)
+	find_library(libdl NAMES dl)
+	find_library(libm NAMES m)
+	set(LIBC_LIBRARIES ${librt} ${libdl} ${libm})    
+else()
+	find_library(librt NAMES rt)
+	find_library(libdl NAMES dl)
+	find_library(libm NAMES m)
+	set(LIBC_LIBRARIES ${librt} ${libdl} ${libm})
 endif()
-find_library(libdl NAMES dl)
-find_library(libm NAMES m)
-set(LIBC_LIBRARIES ${librt} ${libdl} ${libm})
 
 # handle the QUIETLY and REQUIRED arguments and set LIBC_FOUND to TRUE if 
 # all listed variables are TRUE

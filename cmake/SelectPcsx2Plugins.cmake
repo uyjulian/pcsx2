@@ -66,7 +66,7 @@ else()
     message(STATUS "${msg_dep_pcsx2}")
 endif()
 # Linux need also gtk2
-if(UNIX AND pcsx2_core AND NOT GTKn_FOUND)
+if(LINUX AND pcsx2_core AND NOT GTKn_FOUND)
     set(pcsx2_core FALSE)
     message(STATUS "Skip build of pcsx2 core: miss some dependencies")
     message(STATUS "${msg_dep_pcsx2}")
