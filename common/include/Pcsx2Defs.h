@@ -19,13 +19,9 @@
 // Indicate that this is the wx port to the plugins.
 #define WX_PCSX2
 
-#ifdef __CYGWIN__
-#define __linux__
-#endif
-
 // make sure __POSIX__ is defined for all systems where we assume POSIX
 // compliance
-#if defined(__linux__) || defined(__APPLE__) || defined(__unix__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__unix__) || defined(__CYGWIN__) || defined(__LINUX__)
 #	if !defined(__POSIX__)
 #		define __POSIX__ 1
 #	endif

@@ -31,7 +31,7 @@
 #include "TlsVariable.inl"
 #include "debugbreak.h"
 
-#if defined(__UNIX__)
+#if defined(__POSIX__)
 #include <signal.h>
 #endif
 
