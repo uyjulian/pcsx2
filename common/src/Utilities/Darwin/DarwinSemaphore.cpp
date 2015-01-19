@@ -109,7 +109,9 @@ bool Threading::Semaphore::WaitWithoutYield(const wxTimeSpan& timeout)
 
 	// on x86 platforms, mach_absolute_time() returns nanoseconds
 	// TODO(aktau): on iOS a scale value from mach_timebase_info will be necessary
-	u64 delta = (u64) timeout.GetMilliseconds().GetValue();
+	u64 const kOneThousand = 1000;
+	u64 const kOneBillion = kOneThousand * kOneThousand * kOneThousand;
+	u64 const delta = timeout.GetMilliseconds().GetValue() * (kOneThousand * kOneThousand);
 	mach_timespec_t ts;
 	kern_return_t kr = KERN_ABORTED;
 	for (u64 now = mach_absolute_time(), deadline = now + delta;
@@ -120,8 +122,8 @@ bool Threading::Semaphore::WaitWithoutYield(const wxTimeSpan& timeout)
 		}
 
 		u64 timeleft = deadline - now;
-		ts.tv_sec = timeleft / 1000000000ULL;
-		ts.tv_nsec = timeleft % 1000000000ULL;
+		ts.tv_sec = timeleft / kOneBillion;
+		ts.tv_nsec = timeleft % kOneBillion;
 
 		// possible return values of semaphore_timedwait() (from XNU sources):
 		// internal kernel val -> return value
