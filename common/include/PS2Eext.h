@@ -26,11 +26,18 @@
 #include <commctrl.h>
 
 #define EXPORT_C_(type) extern "C" type CALLBACK
-#else
+
+#elseif defined(__GTK__) || defined(__WXGTK__)
+
 #include <gtk/gtk.h>
 #include <cstring>
 
 #define EXPORT_C_(type) extern "C" __attribute__((externally_visible,visibility("default"))) type
+
+#else
+
+#define EXPORT_C_(type) extern "C" __attribute__((externally_visible,visibility("default"))) type
+
 #endif
 
 //#include "PS2Edefs.h"
@@ -161,7 +168,7 @@ struct PluginConf
     }
 };
 
-#ifdef __linux__
+#if defined(__WXGTK__) || defined(__GTK__)
 
 static void SysMessage(const char *fmt, ...)
 {
@@ -220,6 +227,36 @@ static void __forceinline PluginNullAbout(const char *aboutText)
 }
 
 #define ENTRY_POINT /* We don't need no stinkin' entry point! */
+
+
+#elif defined(__WXMAC__) || defined(__APPLE__)
+
+static void SysMessage(const char *fmt, ...)
+{
+    va_list list;
+    char msg[512];
+
+    va_start(list, fmt);
+    vsprintf(msg, fmt, list);
+    va_end(list);
+
+    if (msg[strlen(msg)-1] == '\n') msg[strlen(msg)-1] = 0;
+
+    // TODO OSX can we use WX MessageBox here or should Cocoa MessageBox used?
+}
+
+static void __forceinline PluginNullConfigure(std::string desc, int &log)
+{
+    SysMessage("This space intentionally left blank.");
+}
+
+static void __forceinline PluginNullAbout(const char *aboutText)
+{
+    SysMessage(aboutText);
+}
+
+#define ENTRY_POINT /* We don't need no stinkin' entry point! */ // TODO OSX WTF is this anyway?
+
 
 #else
 
