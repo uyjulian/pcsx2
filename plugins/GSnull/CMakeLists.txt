@@ -37,16 +37,28 @@ set(GSnullHeaders
 	GS.h
 	Registers.h)
 
-# GSnull Linux sources
+# GSnull Linux (GTK) sources
 set(GSnullLinuxSources
 	Linux/Config.cpp
 	Linux/GSLinux.cpp
 	Linux/Linux.cpp)
 
-# GSnull Linux headers
+# GSnull Linux (GTK) headers
 set(GSnullLinuxHeaders
 	Linux/Config.h
 	Linux/GSLinux.h
+	Linux/Linux.h)
+	
+# GSnull Wxwidgets sources
+set(GSnullWxSources
+	Linux/Config.cpp
+	Wx/GSWx.cpp
+	Linux/Linux.cpp)
+
+# GSnull Wxwidgets headers
+set(GSnullWxHeaders
+	Linux/Config.h
+	Wx/GSWx.h
 	Linux/Linux.h)
 
 # GSnull null sources
@@ -69,18 +81,31 @@ set(GSnullWindowsSources
 set(GSnullWindowsHeaders
 	)
 
-set(GSnullFinalSources
-	${GSnullSources}
-	${GSnullHeaders}
-	${GSnullnullSources}
-	${GSnullnullHeaders}
-	${GSnullLinuxSources}
-	${GSnullLinuxHeaders}
-)
+if(APPLE)
+	set(GSnullFinalSources
+		${GSnullSources}
+		${GSnullHeaders}
+		${GSnullnullSources}
+		${GSnullnullHeaders}
+		${GSnullWxSources}
+		${GSnullWxHeaders}
+	)
+#Todo add Windows here if needed
+else()
+	set(GSnullFinalSources
+		${GSnullSources}
+		${GSnullHeaders}
+		${GSnullnullSources}
+		${GSnullnullHeaders}
+		${GSnullLinuxSources}
+		${GSnullLinuxHeaders}
+	)
+endif()
 
 set(GSnullFinalLibs
 	${GTK2_LIBRARIES}
 	${X11_LIBRARIES}
+	${wxWidgets_LIBRARIES}
 )
 
 add_pcsx2_plugin(${Output} "${GSnullFinalSources}" "${GSnullFinalLibs}" "${GSnullFinalFlags}")

@@ -30,6 +30,10 @@ typedef struct _keyEvent keyEvent;
 #	include "Linux/GSLinux.h"
 #endif
 
+#ifdef __APPLE__
+#	include "Wx/GSWx.h"
+#endif
+
 #define GSdefs
 #include "PS2Edefs.h"
 #include "PS2Eext.h"
