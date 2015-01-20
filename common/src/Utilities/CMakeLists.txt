@@ -99,13 +99,13 @@ if(APPLE)
 		Darwin/DarwinMisc.cpp
 		Darwin/DarwinSemaphore.cpp
 	)
-else(APPLE)
+else()
 	LIST(APPEND UtilitiesSources
 		Linux/LnxThreads.cpp
 		Linux/LnxMisc.cpp
 		Semaphore.cpp
 	)
-endif(APPLE)
+endif()
 
 # variable with all sources of this library
 LIST(APPEND UtilitiesSources

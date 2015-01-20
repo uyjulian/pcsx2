@@ -84,7 +84,7 @@ endif()
 #---------------------------------------
 #			CDVDnull
 #---------------------------------------
-if(GTKn_FOUND)
+if(GTKn_FOUND OR wxWidgets_FOUND)
     set(CDVDnull TRUE)
 endif()
 #---------------------------------------
@@ -117,7 +117,7 @@ endif()
 #---------------------------------------
 #			dev9null
 #---------------------------------------
-if(GTKn_FOUND)
+if(EXTRA_PLUGINS OR wxWidgets_FOUND)
     set(dev9null TRUE)
 endif()
 #---------------------------------------
@@ -125,7 +125,7 @@ endif()
 #---------------------------------------
 #			FWnull
 #---------------------------------------
-if(GTKn_FOUND)
+if(EXTRA_PLUGINS OR wxWidgets_FOUND)
     set(FWnull TRUE)
 endif()
 #---------------------------------------
@@ -133,7 +133,7 @@ endif()
 #---------------------------------------
 #			GSnull
 #---------------------------------------
-if(GTKn_FOUND AND EXTRA_PLUGINS)
+if(EXTRA_PLUGINS OR wxWidgets_FOUND)
     set(GSnull TRUE)
 endif()
 #---------------------------------------
@@ -200,7 +200,8 @@ endif()
 #---------------------------------------
 #			PadNull
 #---------------------------------------
-if(GTKn_FOUND AND EXTRA_PLUGINS)
+# TODO OSX when onepad has been ported and tested fully this dep can be removed
+if(GTKn_FOUND AND EXTRA_PLUGINS OR APPLE)
     set(PadNull TRUE)
 endif()
 #---------------------------------------
@@ -224,7 +225,8 @@ endif()
 #---------------------------------------
 #			SPU2null
 #---------------------------------------
-if(GTKn_FOUND AND EXTRA_PLUGINS)
+# TODO OSX when spu2x has been ported and tested fully this dep can be removed
+if(EXTRA_PLUGINS OR APPLE)
     set(SPU2null TRUE)
 endif()
 #---------------------------------------
@@ -275,7 +277,7 @@ endif()
 #---------------------------------------
 #			USBnull
 #---------------------------------------
-if(GTKn_FOUND)
+if(GTKn_FOUND OR wxWidgets_FOUND)
     set(USBnull TRUE)
 endif()
 #---------------------------------------
