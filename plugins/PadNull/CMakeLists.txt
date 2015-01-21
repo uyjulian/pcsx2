@@ -40,6 +40,16 @@ set(PadNullLinuxSources
 set(PadNullLinuxHeaders
 	Linux/Config.h
 	Linux/PadLinux.h)
+	
+# PadNull WxWidgets sources
+set(PadNullWxSources
+	Linux/Config.cpp
+	Wx/PadWx.cpp)
+
+# PadNull WxWidgets headers
+set(PadNullWxHeaders
+	Linux/Config.h
+	Wx/PadWx.h)
 
 # PadNull Windows sources
 set(PadNullWindowsSources
@@ -56,16 +66,27 @@ set(PadNullWindowsHeaders
 # add additional include directories
 include_directories(Linux)
 
-set(PadNullFinalSources
-	${PadNullSources}
-	${PadNullHeaders}
-	${PadNullLinuxSources}
-	${PadNullLinuxHeaders}
-)
+if(APPLE)
+	set(PadNullFinalSources
+		${PadNullSources}
+		${PadNullHeaders}
+		${PadNullWxSources}
+		${PadNullWxHeaders}
+	)
+#Todo add Windows here if needed
+else()
+	set(PadNullFinalSources
+		${PadNullSources}
+		${PadNullHeaders}
+		${PadNullLinuxSources}
+		${PadNullLinuxHeaders}
+	)
+endif()
 
 set(PadNullFinalLibs
 	${GTK2_LIBRARIES}
 	${X11_LIBRARIES}
+	${wxWidgets_LIBRARIES}
 )
 
 add_pcsx2_plugin(${Output} "${PadNullFinalSources}" "${PadNullFinalLibs}" "${PadNullFinalFlags}")

@@ -24,6 +24,8 @@
 
 #ifdef _WIN32
 #include "PadWin.h"
+#elif __APPLE__
+#include "Wx/PadWx.h"
 #else
 #include "PadLinux.h"
 #endif
