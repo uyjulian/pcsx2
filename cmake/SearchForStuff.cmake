@@ -56,7 +56,8 @@ else()
     endif()
 endif()
 
-find_package(wxWidgets COMPONENTS base core adv)
+#On OSX we use gl component of wxwidgets also. If dependency not desired on Linux, if() below
+find_package(wxWidgets COMPONENTS base core adv gl)
 find_package(ZLIB)
 
 ## Use pcsx2 package to find module
