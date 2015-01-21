@@ -149,7 +149,11 @@ void* HostSys::MmapReservePtr(void* base, size_t size)
 	// or anonymous source, with PROT_NONE (no-access) permission.  Since the mapping
 	// is completely inaccessible, the OS will simply reserve it and will not put it
 	// against the commit table.
+#ifdef __APPLE__ // TODO OSX might be that 32bit mmap is not usable: http://stackoverflow.com/questions/5203748/what-is-the-valid-address-space-for-a-user-process-os-x-and-linux
+	return mmap(base, size, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+#else
 	return mmap(base, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+#endif
 }
 
 bool HostSys::MmapCommitPtr(void* base, size_t size, const PageProtectionMode& mode)

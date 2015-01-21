@@ -81,6 +81,7 @@ class FlatFileReader : public AsyncFileReader
 	int m_fd; // FIXME don't know if overlap as an equivalent on linux
 	io_context_t m_aio_context;
 #elif defined(__POSIX__)
+	int m_fd; // TODO OSX don't know if overlap as an equivalent on linux
 	struct aiocb m_aio_context;
 #endif
 
