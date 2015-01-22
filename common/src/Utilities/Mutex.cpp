@@ -32,8 +32,8 @@ namespace Threading
 // --------------------------------------------------------------------------------------
 
 #if defined(_POSIX_TIMEOUTS) && _POSIX_TIMEOUTS >= 200112L
-// good, we have pthread_mutex_trylock
-#define xpthread_mutex_timedlock pthread_mutex_trylock
+// good, we have pthread_mutex_timedlock
+#define xpthread_mutex_timedlock pthread_mutex_timedlock
 #else
 // We have to emulate pthread_mutex_timedlock(). This could be a serious
 // performance drain if its used a lot.

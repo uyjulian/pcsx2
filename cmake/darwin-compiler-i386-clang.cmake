@@ -10,6 +10,7 @@ set(CMAKE_C_COMPILER_TARGET i686-apple-darwin13.0.0)
 set(CMAKE_CXX_COMPILER clang++ -m32)
 set(CMAKE_CXX_COMPILER_TARGET i686-apple-darwin13.0.0)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3")
 
 # If given a CMAKE_FIND_ROOT_PATH then
 # FIND_PROGRAM ignores CMAKE_FIND_ROOT_PATH (probably can't run)

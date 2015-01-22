@@ -20,14 +20,14 @@
 #include <string>
 #include <cstdarg>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
 
 #define EXPORT_C_(type) extern "C" type CALLBACK
 
-#elseif defined(__GTK__) || defined(__WXGTK__)
+#elif defined(__WXGTK__)
 
 #include <gtk/gtk.h>
 #include <cstring>
@@ -168,7 +168,7 @@ struct PluginConf
     }
 };
 
-#if defined(__WXGTK__) || defined(__GTK__)
+#if defined(__WXGTK__)
 
 static void SysMessage(const char *fmt, ...)
 {
