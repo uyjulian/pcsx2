@@ -15,8 +15,8 @@
  * along with SPU2-X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #ifndef __LINUX_H__
- #define __LINUX_H__
+ #ifndef __SPU2X_ALSA_LINUX_H__
+ #define __SPU2X_ALSA_LINUX_H__
 
 #include <assert.h>
 #include <stdlib.h>
@@ -39,4 +39,4 @@ extern void RemoveSound();
 extern int SoundGetBytesBuffered();
 extern void SoundFeedVoiceData(unsigned char* pSound,long lBytes);
 
-#endif // __LINUX_H__
+#endif // __SPU2X_ALSA_LINUX_H__
