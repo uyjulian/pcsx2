@@ -82,7 +82,6 @@ set(GSdxSources
     GSDrawScanlineCodeGenerator.x64.avx.cpp
     GSDump.cpp
     GSFunctionMap.cpp
-    GSLinuxDialog.cpp
     GSLocalMemory.cpp
     GSPerfMon.cpp
     GSRasterizer.cpp
@@ -115,8 +114,6 @@ set(GSdxSources
     GSVector.cpp
     GSVertexTrace.cpp
     GSWnd.cpp
-    GSWndOGL.cpp
-    GSWndEGL.cpp
     GSdx.cpp
     stdafx.cpp
     )
@@ -149,8 +146,7 @@ set(GSdxHeaders
     GSDrawingContext.h
     GSDrawingEnvironment.h
     GSDump.h
-    GSFunctionMap.h
-    GSLinuxLogo.h
+    GSFunctionMap.h    
     GSLocalMemory.h
     GSPerfMon.h
     GSRasterizer.h
@@ -178,8 +174,6 @@ set(GSdxHeaders
     GSVertexSW.h
     GSVertexTrace.h
     GSWnd.h
-    GSWndOGL.h
-    GSWndEGL.h
     GSdx.h
     res/glsl_source.h
     stdafx.h
@@ -188,15 +182,6 @@ set(GSdxHeaders
     xbyak/xbyak_mnemonic.h
     xbyak/xbyak_util.h
     )
-
-set(GSdxFinalSources
-    ${GSdxSources}
-    ${GSdxHeaders}
-)
-
-set(GSdxFinalLibs
-    ${X11_LIBRARIES}
-)
 
 if(GLES_API AND GLESV2_FOUND)
     set(GSdxFinalLibs
@@ -210,10 +195,82 @@ else()
     )
 endif()
 
+if(SDL2_FOUND) #SDL2 OpenGL
+    set(GSdxFinalLibs
+        ${GSdxFinalLibs}
+        ${SDL2_LIBRARIES}
+    )
+    set(GSdxSources
+        ${GSdxSources}
+        GSWndSDLGL.cpp
+    )
+    set(GSdxHeaders
+        ${GSdxHeaders}
+        GSWndSDLGL.h
+    )
+    set(GSdxFinalFlags ${GSdxFinalFlags} -DENABLE_SDLGL)
+elseif(Linux) #XGL
+    set(GSdxFinalLibs
+        ${GSdxFinalLibs}
+        ${X11_LIBRARIES}
+    )
+    set(GSdxSources
+        ${GSdxSources}
+        GSWndOGL.cpp
+    )
+    set(GSdxHeaders
+        ${GSdxHeaders}
+        GSWndOGL.h
+    )
+endif()
+
+if(EGL_FOUND)
+    set(GSdxFinalLibs
+        ${GSdxFinalLibs}
+        ${EGL_LIBRARIES}
+    )
+    set(GSdxSources
+        ${GSdxSources}
+        GSWndEGL.cpp
+    )
+    set(GSdxHeaders
+        ${GSdxHeaders}
+        GSWndEGL.h
+    )
+    set(GSdxFinalFlags ${GSdxFinalFlags} -DENABLE_EGL)
+endif()
+
+if(GTKn_FOUND)
+    set(GSdxSources
+        ${GSdxSources}
+        GSLinuxDialog.cpp
+    )
+    set(GSdxHeaders
+        ${GSdxHeaders}
+        GSLinuxLogo.h
+    )
+    set(GSdxFinalLibs
+        ${GSdxFinalLibs}
+        ${GTK2_LIBRARIES}
+    )
+else()
+    set(GSdxSources
+        ${GSdxSources}
+        GSWxDialog.cpp
+    )
+endif()
+
+if (APPLE)
+    set(GSdxFinalFlags ${GSdxFinalFlags} -D__APPLE__)
+endif()
+
+set(GSdxFinalSources
+    ${GSdxSources}
+    ${GSdxHeaders}
+)
+
 set(GSdxFinalLibs
     ${GSdxFinalLibs}
-    ${EGL_LIBRARIES}
-    ${GTK2_LIBRARIES}
     ${LIBC_LIBRARIES}
 )
 

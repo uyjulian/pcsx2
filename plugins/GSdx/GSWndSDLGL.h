@@ -21,20 +21,21 @@
 
 #include "GSWnd.h"
 
-#if defined(__linux__) && !defined(ENABLE_GLES) && !defined(ENABLE_SDLGL)
-#include <X11/Xlib.h>
-#include <GL/glx.h>
 
+#if defined(ENABLE_SDLGL) && !defined(ENABLE_GLES)
+#include <SDL.h>
 class GSWndOGL : public GSWndGL
 {
-	Window     m_NativeWindow;
-	Display*   m_NativeDisplay;
-	GLXContext m_context;
+	SDL_Window*     m_NativeWindow;
+	void*   m_NativeDisplay;
+	SDL_GLContext  m_context;
 
-	PFNGLXSWAPINTERVALEXTPROC m_swapinterval;
+	bool m_SDLInitialized;
 
 	void CreateContext(int major, int minor);
 	void CheckContext();
+
+	void SDLInit();
 
 public:
 	GSWndOGL();

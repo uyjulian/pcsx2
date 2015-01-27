@@ -21,6 +21,7 @@
 
 #include "stdafx.h"
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include "GSdx.h"
 #include "GSLinuxLogo.h"
 
@@ -153,7 +154,7 @@ GtkWidget* CreateGlComboBox(const char* option)
 	return combo;
 }
 
-bool RunLinuxDialog()
+bool RunDialog()
 {
 	GtkWidget *dialog;
 	GtkWidget *main_box, *central_box, *advance_box, *res_box, *hw_box, *sw_box, *shader_box;
