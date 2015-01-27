@@ -46,7 +46,7 @@ const char* s_iniFilename = "GSnull.ini";
 GSVars gs;
 
 // Because I haven't bothered to get GSOpen2 working in Windows yet in GSNull.
-#ifdef __linux__
+#ifdef __POSIX__
 #define USE_GSOPEN2
 #endif
 
