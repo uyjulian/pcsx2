@@ -58,8 +58,7 @@ void GSWndGL::PopulateGlFunction()
 	*(void**)&(gl_GenSamplers) = GetProcAddress("glGenSamplers");
 	*(void**)&(gl_GenVertexArrays) = GetProcAddress("glGenVertexArrays");
 	*(void**)&(gl_GetBufferParameteriv) = GetProcAddress("glGetBufferParameteriv");
-	*(void**)&(gl_GetDebugMessageLogARB) = GetProcAddress("glGetDebugMessageLogARB");
-	*(void**)&(gl_DebugMessageCallback) = GetProcAddress("glDebugMessageCallback");
+
 	*(void**)&(gl_GetProgramInfoLog) = GetProcAddress("glGetProgramInfoLog");
 	*(void**)&(gl_GetProgramiv) = GetProcAddress("glGetProgramiv");
 	*(void**)&(gl_GetShaderiv) = GetProcAddress("glGetShaderiv");
@@ -102,8 +101,7 @@ void GSWndGL::PopulateGlFunction()
 	*(void**)&(gl_GetShaderInfoLog) = GetProcAddress("glGetShaderInfoLog");
 	*(void**)&(gl_LinkProgram) = GetProcAddress("glLinkProgram");
 	// GL4.2
-	*(void**)&(gl_BindImageTexture) = GetProcAddress("glBindImageTexture", true);
-	*(void**)&(gl_MemoryBarrier) = GetProcAddress("glMemoryBarrier", true);
+
 	*(void**)&(gl_TexStorage2D) = GetProcAddress("glTexStorage2D");
 	// GL4.3
 	*(void**)&(gl_CopyImageSubData) = GetProcAddress("glCopyImageSubData", true);
@@ -147,5 +145,12 @@ void GSWndGL::PopulateGlFunction()
 
 	*(void**)&(gl_ClipControl) = GetProcAddress("glClipControl", true);
 
+#endif
+
+#ifndef NO_EXTRA_ARB
+    *(void**)&(gl_GetDebugMessageLogARB) = GetProcAddress("glGetDebugMessageLogARB");
+    *(void**)&(gl_DebugMessageCallback) = GetProcAddress("glDebugMessageCallback");
+    *(void**)&(gl_BindImageTexture) = GetProcAddress("glBindImageTexture", true);
+    *(void**)&(gl_MemoryBarrier) = GetProcAddress("glMemoryBarrier", true);
 #endif
 }

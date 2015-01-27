@@ -170,7 +170,7 @@ using namespace std;
 
 	#define DIRECTORY_SEPARATOR '\\'
 
-#else
+#else // POSIX
 
 	#define hash_map map
 	#define hash_set set
@@ -178,13 +178,22 @@ using namespace std;
 	//#include <ext/hash_map>
 	//#include <ext/hash_set>
 
+#ifndef __POSIX__
+	#define __POSIX__ 1
+#endif
+
 #ifdef ENABLE_GLES
 	#include <GLES3/gl3.h>
 	#include <GLES3/gl3ext.h>
-#else
+	#define NO_EXTRA_ARB 1
+#elif __linux__ // GLX
 	// Note use GL/glcorearb.h on the future
 	#include <GL/gl.h>
 	#include <GL/glext.h>
+#elif __APPLE__
+	#include <OpenGL/gl3.h>
+	#include <OpenGL/gl3ext.h>
+	#define NO_EXTRA_ARB 1
 #endif
 	#include "GLLoader.h"
 
@@ -206,7 +215,12 @@ using namespace std;
     #define __aligned(t, n) t __attribute__((aligned(n)))
     #define __fastcall __attribute__((fastcall))
 
+// TODO OSX 
+#ifdef __APPLE__
+    #define EXPORT_C_(type) extern "C" __attribute__((fastcall,externally_visible,visibility("default"))) type
+#else
     #define EXPORT_C_(type) extern "C" __attribute__((stdcall,externally_visible,visibility("default"))) type
+#endif
     #define EXPORT_C EXPORT_C_(void)
 
     #ifdef __GNUC__

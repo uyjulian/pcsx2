@@ -89,6 +89,10 @@ void* vmalloc(size_t size, bool code)
 		flags |= PROT_EXEC;
 	}
 
+	// TODO OSX mmap :/
+#ifdef __APPLE__
+#define MAP_ANONYMOUS MAP_ANON
+#endif
 	return mmap(NULL, size, flags, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 }
 

@@ -520,7 +520,7 @@ void GSRendererOGL::DrawPrims(GSTexture* rt, GSTexture* ds, GSTextureCache::Sour
 		dev->SetupPS(ps_sel);
 
 		// Be sure that first pass is finished !
-#ifndef ENABLE_GLES
+#ifndef NO_EXTRA_ARB
 		if (!UserHacks_DateGL4)
 			dev->Barrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 #endif

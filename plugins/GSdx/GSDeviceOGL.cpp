@@ -177,7 +177,7 @@ bool GSDeviceOGL::Create(GSWnd* wnd)
 	// ****************************************************************
 	// Debug helper
 	// ****************************************************************
-#ifndef ENABLE_GLES
+#ifndef NO_EXTRA_ARB
 #ifdef ENABLE_OGL_DEBUG
 	gl_DebugMessageCallback((GLDEBUGPROC)DebugOutputToFile, NULL);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
@@ -623,7 +623,7 @@ void GSDeviceOGL::BindDateTexture()
 	// gl_BindImageTextures(2, 1, textures);
 	//gl_BindImageTexture(2, 0, 0, true, 0, GL_READ_WRITE, GL_R32I);
 
-#ifndef ENABLE_GLES
+#ifndef NO_EXTRA_ARB
 	gl_BindImageTexture(2, static_cast<GSTextureOGL*>(m_date.t)->GetID(), 0, false, 0, GL_READ_WRITE, GL_R32I);
 #endif
 }
@@ -643,7 +643,7 @@ void GSDeviceOGL::RecycleDateTexture()
 
 void GSDeviceOGL::Barrier(GLbitfield b)
 {
-#ifndef ENABLE_GLES
+#ifndef NO_EXTRA_ARB
 	gl_MemoryBarrier(b);
 //#ifdef ENABLE_OGL_STENCIL_DEBUG
 //	if (m_date.t)
@@ -1215,7 +1215,7 @@ void GSDeviceOGL::OMSetRenderTargets(GSTexture* rt, GSTexture* ds, const GSVecto
 
 void GSDeviceOGL::CheckDebugLog()
 {
-#ifndef ENABLE_GLES
+#ifndef NO_EXTRA_ARB
        unsigned int count = 16; // max. num. of messages that will be read from the log
        int bufsize = 2048;
 	   unsigned int sources[16] = {};
@@ -1244,7 +1244,7 @@ void GSDeviceOGL::CheckDebugLog()
 // Note: used as a callback of DebugMessageCallback. Don't change the signature
 void GSDeviceOGL::DebugOutputToFile(GLenum gl_source, GLenum gl_type, GLuint id, GLenum gl_severity, GLsizei gl_length, const GLchar *gl_message, const void* userParam)
 {
-#ifndef ENABLE_GLES
+#ifndef NO_EXTRA_ARB
 	std::string message(gl_message, gl_length);
 	std::string type, severity, source;
 	static int sev_counter = 0;

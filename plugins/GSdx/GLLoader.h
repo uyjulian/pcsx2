@@ -26,7 +26,7 @@
 #define GL_FB_DEFAULT  (0)
 #define GL_BUFFER_0    (0)
 
-#ifndef ENABLE_GLES
+#if !defined(ENABLE_GLES) && !defined(NO_EXTRA_ARB)
 // FIX compilation issue with Mesa 10
 // Note it might be possible to do better with the right include 
 // in the rigth order but I don't have time
@@ -219,8 +219,13 @@ extern   PFNGLBINDBUFFERBASEPROC                gl_BindBufferBase;
 extern   PFNGLBINDFRAMEBUFFERPROC               gl_BindFramebuffer;
 extern   PFNGLBINDSAMPLERPROC                   gl_BindSampler;
 extern   PFNGLBINDVERTEXARRAYPROC               gl_BindVertexArray;
+#ifdef __APPLE_CHECK_THIS__ // TODO OSX not on APPLE, really?
+extern   PFNGLBLENDEQUATIONSEPARATEIPROC     gl_BlendEquationSeparateiARB;
+extern   PFNGLBLENDFUNCSEPARATEIPROC         gl_BlendFuncSeparateiARB;
+#else
 extern   PFNGLBLENDEQUATIONSEPARATEIARBPROC     gl_BlendEquationSeparateiARB;
 extern   PFNGLBLENDFUNCSEPARATEIARBPROC         gl_BlendFuncSeparateiARB;
+#endif
 extern   PFNGLBLITFRAMEBUFFERPROC               gl_BlitFramebuffer;
 extern   PFNGLBUFFERDATAPROC                    gl_BufferData;
 extern   PFNGLCHECKFRAMEBUFFERSTATUSPROC        gl_CheckFramebufferStatus;
@@ -249,8 +254,7 @@ extern   PFNGLGENFRAMEBUFFERSPROC               gl_GenFramebuffers;
 extern   PFNGLGENSAMPLERSPROC                   gl_GenSamplers;
 extern   PFNGLGENVERTEXARRAYSPROC               gl_GenVertexArrays;
 extern   PFNGLGETBUFFERPARAMETERIVPROC          gl_GetBufferParameteriv;
-extern   PFNGLGETDEBUGMESSAGELOGARBPROC         gl_GetDebugMessageLogARB;
-extern   PFNGLDEBUGMESSAGECALLBACKPROC          gl_DebugMessageCallback;
+
 extern   PFNGLGETPROGRAMINFOLOGPROC             gl_GetProgramInfoLog;
 extern   PFNGLGETPROGRAMIVPROC                  gl_GetProgramiv;
 extern   PFNGLGETSHADERIVPROC                   gl_GetShaderiv;
@@ -287,8 +291,7 @@ extern   PFNGLUSEPROGRAMPROC                    gl_UseProgram;
 extern   PFNGLGETSHADERINFOLOGPROC              gl_GetShaderInfoLog;
 extern   PFNGLPROGRAMUNIFORM1IPROC              gl_ProgramUniform1i;
 // GL4.2
-extern   PFNGLBINDIMAGETEXTUREPROC              gl_BindImageTexture;
-extern   PFNGLMEMORYBARRIERPROC                 gl_MemoryBarrier;
+
 extern   PFNGLTEXSTORAGE2DPROC                  gl_TexStorage2D;
 // GL4.3
 extern   PFNGLCOPYIMAGESUBDATAPROC              gl_CopyImageSubData;
@@ -405,6 +408,12 @@ extern PFNGLCLIPCONTROLPROC                     gl_ClipControl;
 
 #endif
 
+#ifndef NO_EXTRA_ARB
+extern   PFNGLBINDIMAGETEXTUREPROC              gl_BindImageTexture;
+extern   PFNGLMEMORYBARRIERPROC                 gl_MemoryBarrier;
+extern   PFNGLGETDEBUGMESSAGELOGPROC            gl_GetDebugMessageLogARB;
+extern   PFNGLDEBUGMESSAGECALLBACKPROC          gl_DebugMessageCallback;
+#endif
 
 namespace GLLoader {
 	bool check_gl_version(uint32 major, uint32 minor);
