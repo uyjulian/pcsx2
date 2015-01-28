@@ -278,6 +278,8 @@ public:
 		}
 		else
 		{
+			ActualPaCallback = new ConvertedSampleReader<Stereo20Out32>(&writtenSoFar);
+			actualUsedChannels = 2;
 			err = Pa_OpenDefaultStream( &stream,
 				0, actualUsedChannels, paInt32, 48000,
 				SndOutPacketSize,
@@ -581,6 +583,9 @@ public:
 #ifdef __linux__
 		// By default on linux use the ALSA API (+99% users) -- Gregory
 		CfgReadStr( L"PORTAUDIO", L"HostApi", api, L"ALSA" );
+#elif defined(__APPLE__)
+		// Suppose OSX only has CoreAudio...
+		CfgReadStr( L"PORTAUDIO", L"HostApi", api, L"CoreAudio" );
 #else
 		CfgReadStr( L"PORTAUDIO", L"HostApi", api, L"WASAPI" );
 #endif
