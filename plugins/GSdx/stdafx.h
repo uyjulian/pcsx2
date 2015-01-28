@@ -178,6 +178,7 @@ using namespace std;
 	//#include <ext/hash_map>
 	//#include <ext/hash_set>
 
+// TODO OSX get this from Pcsx2Defs.h
 #ifndef __POSIX__
 	#define __POSIX__ 1
 #endif

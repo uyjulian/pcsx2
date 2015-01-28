@@ -26,7 +26,7 @@
 #define GL_FB_DEFAULT  (0)
 #define GL_BUFFER_0    (0)
 
-#if !defined(ENABLE_GLES) && !defined(NO_EXTRA_ARB)
+#if !defined(ENABLE_GLES)
 // FIX compilation issue with Mesa 10
 // Note it might be possible to do better with the right include 
 // in the rigth order but I don't have time
@@ -37,10 +37,12 @@
 #define APIENTRYP APIENTRY *
 #endif
 
+#ifndef NO_EXTRA_ARB
 // Allow compilation with older mesa
 #ifndef GL_VERSION_4_3
 #define GL_VERSION_4_3 1
 typedef void (APIENTRYP PFNGLDEBUGMESSAGECALLBACKPROC) (GLDEBUGPROC callback, const void *userParam);
+#endif
 #endif
 
 #ifndef GL_ARB_copy_image
