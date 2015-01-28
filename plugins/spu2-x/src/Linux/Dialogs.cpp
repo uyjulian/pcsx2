@@ -17,7 +17,7 @@
 
  // To be continued...
 
- #include "Dialogs.h"
+#include "Dialogs.h"
 #include <gtk/gtk.h>
 #include <cstring>
 
