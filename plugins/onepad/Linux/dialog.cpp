@@ -23,6 +23,7 @@
 #include "keyboard.h"
 #include "onepad.h"
 #include <gtk/gtk.h>
+#include "linux.h"
 
 void config_key(int pad, int key);
 void on_conf_key(GtkButton *button, gpointer user_data);
@@ -245,7 +246,7 @@ void populate_new_joysticks(GtkComboBoxText *box)
 	char str[255];
 	JoystickInfo::EnumerateJoysticks(s_vjoysticks);
 
-	gtk_combo_box_text_append_text(box, "Keyboard/mouse only");
+    gtk_combo_box_text_append_text(box, "Keyboard/mouse1 only");
 	
 	vector<JoystickInfo*>::iterator it = s_vjoysticks.begin();
 
@@ -310,7 +311,8 @@ void config_key(int pad, int key)
 	{
 		vector<JoystickInfo*>::iterator itjoy;
 
-		if (PollX11KeyboardMouseEvent(key_pressed))
+        //PAD_LOG ("ENTER1\n");
+        if (PollKeyboardMouseEvent(key_pressed))
 		{
 			// special case for keyboard/mouse to handle multiple keys
 			// Note: key_pressed == 0 when ESC is hit to abort the capture
