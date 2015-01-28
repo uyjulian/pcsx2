@@ -19,28 +19,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- #ifndef __KEYBOARD_H__
- #define __KEYBOARD_H__
+#ifndef __KEYBOARD_H__
+#define __KEYBOARD_H__
 
 #include "onepad.h"
 
-#ifdef __linux__
-
-#include "Linux/linux.h"
-
-extern Display *GSdsp;
-extern void PollForX11KeyboardInput(int pad);
-extern bool PollX11KeyboardMouseEvent(u32 &pkey);
-extern Window GSwin;
-
+#ifdef __POSIX__
+bool PollKeyboardMouseEvent(u32 &pkey);
+void PollForKeyboardInput(int pad);
+bool PlatformAnalyzeKeyEvent(keyEvent &evt);
+void AnalyzeKeyEvent(int pad, keyEvent &evt);
+void SetAutoRepeat(bool autorep);
+const char* PlatformKeysymToString(int keysym);
+void DefaultKeyboardValues();
+string KeyName(int pad, int key, int keysym = 0);
 #else
-
 extern char* KeysymToChar(int keysym);
 extern WNDPROC GSwndProc;
 extern HWND GShwnd;
-
 #endif
 
-extern void SetAutoRepeat(bool autorep);
-
-#endif
+#endif //__KEYBOARD_H__

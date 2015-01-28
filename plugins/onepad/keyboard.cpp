@@ -24,11 +24,11 @@
   * Pragmatically, event handing's going in here too.
   */
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include "keyboard.h"
 
-#ifndef __linux__
+// TODO OSX move Windows specific implementations to Windows/platform.cpp
+
+#ifndef __POSIX__
 char* KeysymToChar(int keysym)
 {
 	LPWORD temp;
@@ -38,22 +38,6 @@ char* KeysymToChar(int keysym)
 }
 #endif
 
-void SetAutoRepeat(bool autorep)
-{
- #ifdef __linux__
-    if (toggleAutoRepeat)
-    {
-        if (autorep)
-            XAutoRepeatOn(GSdsp);
-        else
-            XAutoRepeatOff(GSdsp);
-    }
-#endif
-}
-
-#ifdef __linux__
-static bool s_grab_input = false;
-static bool s_Shift = false;
 static unsigned int  s_previous_mouse_x = 0;
 static unsigned int  s_previous_mouse_y = 0;
 void AnalyzeKeyEvent(int pad, keyEvent &evt)
@@ -64,24 +48,6 @@ void AnalyzeKeyEvent(int pad, keyEvent &evt)
 	switch (evt.evt)
 	{
 		case KeyPress:
-			// Shift F12 is not yet use by pcsx2. So keep it to grab/ungrab input
-			// I found it very handy vs the automatic fullscreen detection
-			// 1/ Does not need to detect full-screen
-			// 2/ Can use a debugger in full-screen
-			// 3/ Can grab input in window without the need of a pixelated full-screen
-			if (key == XK_Shift_R || key == XK_Shift_L) s_Shift = true;
-			if (key == XK_F12 && s_Shift) {
-				if(!s_grab_input) {
-					s_grab_input = true;
-					XGrabPointer(GSdsp, GSwin, True, ButtonPressMask, GrabModeAsync, GrabModeAsync, GSwin, None, CurrentTime);
-					XGrabKeyboard(GSdsp, GSwin, True, GrabModeAsync, GrabModeAsync, CurrentTime);
-				} else {
-					s_grab_input = false;
-					XUngrabPointer(GSdsp, CurrentTime);
-					XUngrabKeyboard(GSdsp, CurrentTime);
-				}
-			}
-
 			// Analog controls.
 			if (IsAnalogKey(index))
 			{
@@ -110,21 +76,11 @@ void AnalyzeKeyEvent(int pad, keyEvent &evt)
 			break;
 
 		case KeyRelease:
-			if (key == XK_Shift_R || key == XK_Shift_L) s_Shift = false;
-
 			if (index != -1)
 				key_status->release(pad, index);
 
 			event.evt = KEYRELEASE;
 			event.key = key;
-			break;
-
-		case FocusIn:
-			XAutoRepeatOff(GSdsp);
-			break;
-
-		case FocusOut:
-			XAutoRepeatOn(GSdsp);
 			break;
 
 		case ButtonPress:
@@ -193,62 +149,7 @@ void AnalyzeKeyEvent(int pad, keyEvent &evt)
 	}
 }
 
-void PollForX11KeyboardInput(int pad)
-{
-	keyEvent evt;
-	XEvent E;
-
-	// Keyboard input send by PCSX2
-	while (!ev_fifo.empty()) {
-		AnalyzeKeyEvent(pad, ev_fifo.front());
-		pthread_spin_lock(&mutex_KeyEvent);
-		ev_fifo.pop();
-		pthread_spin_unlock(&mutex_KeyEvent);
-	}
-
-	// keyboard input
-	while (XPending(GSdsp) > 0)
-	{
-		XNextEvent(GSdsp, &E);
-
-		// Change the format of the structure to be compatible with GSOpen2
-		// mode (event come from pcsx2 not X)
-		evt.evt = E.type;
-		switch (E.type) {
-			case MotionNotify:
-				evt.key = (E.xbutton.x & 0xFFFF) | (E.xbutton.y << 16);
-				break;
-			case ButtonRelease:
-			case ButtonPress:
-				evt.key = E.xbutton.button;
-				break;
-			default:
-				evt.key = (int)XLookupKeysym(&E.xkey, 0);
-		}
-
-		AnalyzeKeyEvent(pad, evt);
-	}
-}
-
-bool PollX11KeyboardMouseEvent(u32 &pkey)
-{
-	GdkEvent *ev = gdk_event_get();
-
-	if (ev != NULL)
-	{
-		if (ev->type == GDK_KEY_PRESS) {
-			pkey = ev->key.keyval != GDK_KEY_Escape ? ev->key.keyval : 0;
-			return true;
-		} else if(ev->type == GDK_BUTTON_PRESS) {
-			pkey = ev->button.button;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-#else
+#ifndef __POSIX__
 LRESULT WINAPI PADwndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static bool lbutton = false, rbutton = false;
