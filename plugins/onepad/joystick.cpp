@@ -364,3 +364,75 @@ int JoystickInfo::GetAxisFromKey(int pad, int index)
 {
 	return SDL_JoystickGetAxis(GetJoy(), key_to_axis(pad, index));
 }
+
+void PollForJoystickInput(int cpad)
+{
+	int joyid = conf->get_joyid(cpad);
+	if (!JoystickIdWithinBounds(joyid)) return;
+
+	SDL_JoystickUpdate();
+	for (int i = 0; i < MAX_KEYS; i++)
+	{
+		JoystickInfo* pjoy = s_vjoysticks[joyid];
+
+		switch (type_of_joykey(cpad, i))
+		{
+			case PAD_JOYBUTTONS:
+				{
+
+					int value = SDL_JoystickGetButton((pjoy)->GetJoy(), key_to_button(cpad, i));
+					if (value)
+						key_status->press(cpad, i);
+					else
+						key_status->release(cpad, i);
+
+					break;
+				}
+			case PAD_HAT:
+				{
+					int value = SDL_JoystickGetHat((pjoy)->GetJoy(), key_to_axis(cpad, i));
+
+					// key_to_hat_dir and SDL_JoystickGetHat are a 4 bits bitmap, one for each directions. Only 1 bit can be high for
+					// key_to_hat_dir. SDL_JoystickGetHat handles diagonal too (2 bits) so you must check the intersection
+					// '&' not only equality '=='. -- Gregory
+					if (key_to_hat_dir(cpad, i) & value)
+						key_status->press(cpad, i);
+					else
+						key_status->release(cpad, i);
+
+					break;
+				}
+			case PAD_AXIS:
+				{
+					int value = pjoy->GetAxisFromKey(cpad, i);
+					bool sign = key_to_axis_sign(cpad, i);
+					bool full_axis = key_to_axis_type(cpad, i);
+
+					if (IsAnalogKey(i)) {
+						if (abs(value) > pjoy->GetDeadzone())
+							key_status->press(cpad, i, value);
+						else
+							key_status->release(cpad, i);
+
+					} else {
+						if (full_axis) {
+							value += 0x8000;
+							if (value > pjoy->GetDeadzone())
+								key_status->press(cpad, i, min(value/256 , 0xFF));
+							else
+								key_status->release(cpad, i);
+
+						} else {
+							if (sign && (-value > pjoy->GetDeadzone()))
+								key_status->press(cpad, i, min(-value /128, 0xFF));
+							else if (!sign && (value > pjoy->GetDeadzone()))
+								key_status->press(cpad, i, min(value /128, 0xFF));
+							else
+								key_status->release(cpad, i);
+						}
+					}
+				}
+			default: break;
+		}
+	}
+}
