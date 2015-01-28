@@ -144,7 +144,7 @@ endif()
 # requires: -OpenGL
 #			-X11
 #---------------------------------------
-if(OPENGL_FOUND AND X11_FOUND AND EGL_FOUND AND GTKn_FOUND)
+if(OPENGL_FOUND)
     set(GSdx TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/GSdx")
 	set(GSdx FALSE)
@@ -240,12 +240,12 @@ endif()
 #           -SDL
 #           -common_libs
 #---------------------------------------
-if(ALSA_FOUND AND PORTAUDIO_FOUND AND SOUNDTOUCH_FOUND AND SDLn_FOUND AND common_libs)
-	set(spu2-x TRUE)
+if((PORTAUDIO_FOUND OR SDLn_FOUND OR ALSA_FOUND) AND SOUNDTOUCH_FOUND AND common_libs)
+    set(spu2-x TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/spu2-x")
-	set(spu2-x FALSE)
+    set(spu2-x FALSE)
 else()
-	set(spu2-x FALSE)
+    set(spu2-x FALSE)
     message(STATUS "Skip build of spu2-x: miss some dependencies")
     message(STATUS "${msg_dep_spu2x}")
 endif()
