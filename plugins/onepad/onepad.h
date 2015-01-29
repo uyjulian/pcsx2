@@ -29,13 +29,6 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <windowsx.h>
-
-#else
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
-
 #endif
 
 #include <vector>
@@ -92,8 +85,8 @@ extern FILE *padLog;
 extern void initLogging();
 extern bool toggleAutoRepeat;
 
-#define PAD_LOG __Log
-//#define PAD_LOG __LogToConsole
+//#define PAD_LOG __Log
+#define PAD_LOG __LogToConsole
 
 enum PadCommands
 {
