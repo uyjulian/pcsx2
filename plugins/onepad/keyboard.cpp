@@ -26,23 +26,11 @@
 
 #include "keyboard.h"
 
-// TODO OSX move Windows specific implementations to Windows/platform.cpp
-
-#ifndef __POSIX__
-char* KeysymToChar(int keysym)
-{
-	LPWORD temp;
-
-	ToAscii((UINT) keysym, NULL, NULL, temp, NULL);
-	return (char*)temp;
-}
-#endif
-
 static unsigned int  s_previous_mouse_x = 0;
 static unsigned int  s_previous_mouse_y = 0;
 void AnalyzeKeyEvent(int pad, keyEvent &evt)
 {
-	KeySym key = (KeySym)evt.key;
+	u32 key = evt.key;
 	int index = get_keyboard_key(pad, key);
 
 	switch (evt.evt)
@@ -149,6 +137,7 @@ void AnalyzeKeyEvent(int pad, keyEvent &evt)
 	}
 }
 
+// TODO OSX move Windows specific implementations to Windows/platform.cpp
 #ifndef __POSIX__
 LRESULT WINAPI PADwndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -208,5 +197,13 @@ LRESULT WINAPI PADwndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		key_status->commit_status(pad);
 
 	return TRUE;
+}
+
+char* KeysymToChar(int keysym)
+{
+	LPWORD temp;
+
+	ToAscii((UINT) keysym, NULL, NULL, temp, NULL);
+	return (char*)temp;
 }
 #endif

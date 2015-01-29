@@ -27,11 +27,11 @@ __forceinline void set_keyboad_key(int pad, int keysym, int index)
 	conf->keysym_map[pad][keysym] = index;
 }
 
-__forceinline int get_keyboard_key(int pad, int keysym)
+__forceinline int get_keyboard_key(int pad, u32 key)
 {
 	// You must use find instead of []
 	// [] will create an element if the key does not exist and return 0
-	map<u32,u32>::iterator it = conf->keysym_map[pad].find(keysym);
+	map<u32,u32>::iterator it = conf->keysym_map[pad].find(key);
 	if (it != conf->keysym_map[pad].end())
 		return it->second;
 	else

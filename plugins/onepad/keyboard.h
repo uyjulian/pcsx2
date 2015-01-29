@@ -24,6 +24,20 @@
 
 #include "onepad.h"
 
+// TODO OSX these are taken from X11/X.h. It would be nice to have these as PCSX2 specific defs...
+#ifdef __WXMAC__
+#define KeyPress                2
+#define KeyRelease              3
+#define ButtonPress             4
+#define ButtonRelease           5
+#define MotionNotify            6
+#define EnterNotify             7
+#define LeaveNotify             8
+//#define FocusIn                 9
+//#define FocusOut                10
+//#define KeymapNotify            11
+#endif
+
 #ifdef __POSIX__
 bool PollKeyboardMouseEvent(u32 &pkey);
 void PollForKeyboardInput(int pad);
