@@ -341,7 +341,7 @@ void GSPanel::OnFocusLost( wxFocusEvent& evt )
 	evt.Skip();
 	m_HasFocus = false;
 	DoShowMouse();
-#ifdef __POSIX__
+#ifdef __linux__ // TODO OSX handle properly these HACK2: otherwise events are not recognized
 	// HACK2: In gsopen2 there is one event buffer read by both wx/gui and pad plugin. Wx deletes
 	// the event before the pad see it. So you send key event directly to the pad.
 	if( (PADWriteEvent != NULL) && (GSopen2 != NULL) ) {
