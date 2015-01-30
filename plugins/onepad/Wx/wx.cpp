@@ -19,15 +19,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/utils.h>
+#include "wx.h"
 #include "joystick.h"
 #include "onepad.h"
 #include "keyboard.h"
 
 #include <string.h>
 #include "PS2Eext.h"
-#include "wx.h"
 
-#include <wx/utils.h>
+
 
 GSdspTPtr   GSdsp;
 GSwinTPtr   GSwin;
@@ -73,9 +74,9 @@ EXPORT_C_(void) PADWriteEvent(keyEvent &evt)
     // This function call be called before PADopen. Therefore we cann't
     // guarantee that the spin lock was initialized
     if (mutex_WasInit) {
-        pthread_spin_lock(&mutex_KeyEvent);
+        SPINLOCK(&mutex_KeyEvent);
         ev_fifo.push(evt);
-        pthread_spin_unlock(&mutex_KeyEvent);
+        SPINUNLOCK(&mutex_KeyEvent);
     }
 }
 

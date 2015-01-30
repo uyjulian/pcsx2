@@ -19,10 +19,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/window.h>
+#include "wx.h"
 #include "joystick.h"
 #include "keyboard.h"
 #include "onepad.h"
-#include "wx.h"
 
 void DisplayDialog()
 {

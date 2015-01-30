@@ -85,8 +85,8 @@ extern FILE *padLog;
 extern void initLogging();
 extern bool toggleAutoRepeat;
 
-//#define PAD_LOG __Log
-#define PAD_LOG __LogToConsole
+#define PAD_LOG __Log
+//#define PAD_LOG __LogToConsole
 
 enum PadCommands
 {

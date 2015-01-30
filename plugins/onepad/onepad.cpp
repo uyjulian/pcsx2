@@ -46,8 +46,18 @@ std::string s_strLogPath("logs/");
 bool toggleAutoRepeat = true;
 
 const u32 version  = PS2E_PAD_VERSION;
+
+// increase that with each version
+#ifdef VERINFO_REV
+const u32 revision = VERINFO_REV;
+#else
 const u32 revision = 1;
-const u32 build    = 1;    // increase that with each version
+#endif
+#ifdef VERINFO_BUILD
+const u32 build    = VERINFO_BUILD;
+#else
+const u32 build    = 1;
+#endif
 
 int PadEnum[2][2] = {{0, 2}, {1, 3}};
 
@@ -208,7 +218,7 @@ void initLogging()
     if (padLog)
         setvbuf(padLog, NULL,  _IONBF, 0);
 
-	PAD_LOG("PADinit\n");
+    PAD_LOG("PADinit1\n");
 #endif
 }
 
@@ -246,7 +256,7 @@ EXPORT_C_(s32) PADinit(u32 flags)
 
 EXPORT_C_(void) PADshutdown()
 {
-    CloseLogging();
+	CloseLogging();
 	if (conf) delete conf;
 	if (key_status) delete key_status;
 }

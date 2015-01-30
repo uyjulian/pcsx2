@@ -5,22 +5,25 @@ if(NOT TOP_CMAKE_WAS_SOURCED)
 	It is advice to delete all wrongly generated cmake stuff => CMakeFiles & CMakeCache.txt")
 endif()
 
+set (VERINFO_REV 2)
+set (VERINFO_BUILD 1)
+set (VERINFO_DEFSTR "-DVERINFO_REV=${VERINFO_REV} -DVERINFO_BUILD=${VERINFO_BUILD}")
 
 # plugin name
-set(Output onepad-1.2.0)
+set(Output onepad-1.${VERINFO_REV}.${VERINFO_BUILD})
 
 set(OptimizationFlags
 	-O2
 	)
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
-	set(onepadFinalFlags "")
+	set(onepadFinalFlags ${VERINFO_DEFSTR} )
 
 elseif(CMAKE_BUILD_TYPE STREQUAL Devel)
-	set(onepadFinalFlags ${OptimizationFlags})
+	set(onepadFinalFlags ${VERINFO_DEFSTR} ${OptimizationFlags})
 
 elseif(CMAKE_BUILD_TYPE STREQUAL Release)
-	set(onepadFinalFlags ${OptimizationFlags})
+	set(onepadFinalFlags ${VERINFO_DEFSTR} ${OptimizationFlags})
 
 endif()
 
@@ -51,6 +54,12 @@ if(GTKn_FOUND)
 	# onepad Linux headers
 	set(onepadPlatformHeaders
 		Linux/linux.h)
+
+	set(onepadFinalLibs
+		${onepadFinalLibs}
+		${GTK2_LIBRARIES}
+		${X11_LIBRARIES}
+	)
 else()
 	# onepad WxWidgets sources
 	set(onepadPlatformSources	
@@ -82,8 +91,6 @@ endif()
 
 set(onepadFinalLibs
 	${onepadFinalLibs}
-	${GTK2_LIBRARIES}
-	${X11_LIBRARIES}
 	${wxWidgets_LIBRARIES}
 )
 
