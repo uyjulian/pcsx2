@@ -25,7 +25,7 @@
 #include "onepad.h"
 
 // TODO OSX these are taken from X11/X.h. It would be nice to have these as PCSX2 specific defs...
-#ifdef __WXMAC__
+#ifndef KeyPress
 #define KeyPress                2
 #define KeyRelease              3
 #define ButtonPress             4
