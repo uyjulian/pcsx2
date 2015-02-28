@@ -27,6 +27,11 @@
 
 #include "config.h"
 
+// Require at least Visual Studio 2012
+#if defined(__linux__) || (defined(_MSC_VER) && (_MSC_VER >= 1700))
+#define _STD_ATOMIC_
+#endif
+
 #ifdef _WINDOWS
 
 #include "targetver.h"
@@ -96,6 +101,9 @@ typedef uint32 uptr;
 #include <set>
 #include <queue>
 #include <algorithm>
+#ifdef _STD_ATOMIC_
+#include <atomic>
+#endif
 
 using namespace std;
 
