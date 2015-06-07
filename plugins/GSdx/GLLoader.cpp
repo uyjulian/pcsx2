@@ -30,8 +30,13 @@ PFNGLBINDBUFFERBASEPROC                gl_BindBufferBase                    = NU
 PFNGLBINDFRAMEBUFFERPROC               gl_BindFramebuffer                   = NULL;
 PFNGLBINDSAMPLERPROC                   gl_BindSampler                       = NULL;
 PFNGLBINDVERTEXARRAYPROC               gl_BindVertexArray                   = NULL;
+#ifdef __APPLE_CHECK_THIS__ // TODO OSX not on APPLE, really?
+PFNGLBLENDEQUATIONSEPARATEIPROC     gl_BlendEquationSeparateiARB         = NULL;
+PFNGLBLENDFUNCSEPARATEIPROC         gl_BlendFuncSeparateiARB             = NULL;
+#else
 PFNGLBLENDEQUATIONSEPARATEIARBPROC     gl_BlendEquationSeparateiARB         = NULL;
 PFNGLBLENDFUNCSEPARATEIARBPROC         gl_BlendFuncSeparateiARB             = NULL;
+#endif
 PFNGLBLITFRAMEBUFFERPROC               gl_BlitFramebuffer                   = NULL;
 PFNGLBUFFERDATAPROC                    gl_BufferData                        = NULL;
 PFNGLCHECKFRAMEBUFFERSTATUSPROC        gl_CheckFramebufferStatus            = NULL;
@@ -60,8 +65,6 @@ PFNGLGENFRAMEBUFFERSPROC               gl_GenFramebuffers                   = NU
 PFNGLGENSAMPLERSPROC                   gl_GenSamplers                       = NULL;
 PFNGLGENVERTEXARRAYSPROC               gl_GenVertexArrays                   = NULL;
 PFNGLGETBUFFERPARAMETERIVPROC          gl_GetBufferParameteriv              = NULL;
-PFNGLGETDEBUGMESSAGELOGARBPROC         gl_GetDebugMessageLogARB             = NULL;
-PFNGLDEBUGMESSAGECALLBACKPROC          gl_DebugMessageCallback              = NULL;
 PFNGLGETPROGRAMINFOLOGPROC             gl_GetProgramInfoLog                 = NULL;
 PFNGLGETPROGRAMIVPROC                  gl_GetProgramiv                      = NULL;
 PFNGLGETSHADERIVPROC                   gl_GetShaderiv                       = NULL;
@@ -104,8 +107,6 @@ PFNGLPUSHDEBUGGROUPPROC                gl_PushDebugGroup                    = NU
 PFNGLPOPDEBUGGROUPPROC                 gl_PopDebugGroup                     = NULL;
 PFNGLDEBUGMESSAGEINSERTPROC            gl_DebugMessageInsert                = NULL;
 // GL4.2
-PFNGLBINDIMAGETEXTUREPROC              gl_BindImageTexture                  = NULL;
-PFNGLMEMORYBARRIERPROC                 gl_MemoryBarrier                     = NULL;
 PFNGLTEXSTORAGE2DPROC                  gl_TexStorage2D                      = NULL;
 // GL4.4
 PFNGLCLEARTEXIMAGEPROC                 gl_ClearTexImage                     = NULL;
@@ -312,6 +313,16 @@ namespace Emulate_DSA {
 		gl_CreateSamplers              = CreateSamplers;
 	}
 }
+
+#ifndef NO_EXTRA_ARB
+// Extra debug ARBs not on GLES or CGL
+PFNGLGETDEBUGMESSAGELOGPROC            gl_GetDebugMessageLogARB             = NULL;
+PFNGLDEBUGMESSAGECALLBACKPROC          gl_DebugMessageCallback              = NULL;
+
+// Not
+PFNGLBINDIMAGETEXTUREPROC              gl_BindImageTexture                  = NULL;
+PFNGLMEMORYBARRIERPROC                 gl_MemoryBarrier                     = NULL;
+#endif
 
 namespace GLLoader {
 

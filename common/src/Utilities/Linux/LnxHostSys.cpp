@@ -24,6 +24,12 @@
 #include <errno.h>
 #include <unistd.h>
 
+// Apple uses the MAP_ANON define instead of MAP_ANONYMOUS, but they mean
+// the same thing.
+#if defined(__APPLE__) && !defined(MAP_ANONYMOUS)
+#	define MAP_ANONYMOUS MAP_ANON
+#endif
+
 extern void SignalExit(int sig);
 
 static const uptr m_pagemask = getpagesize()-1;
@@ -143,7 +149,16 @@ void* HostSys::MmapReservePtr(void* base, size_t size)
 	// or anonymous source, with PROT_NONE (no-access) permission.  Since the mapping
 	// is completely inaccessible, the OS will simply reserve it and will not put it
 	// against the commit table.
+#ifdef __APPLE__ // TODO OSX might be that 32bit mmap is not usable: http://stackoverflow.com/questions/5203748/what-is-the-valid-address-space-for-a-user-process-os-x-and-linux
+	void *ret =mmap(base, size, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+	// TODO OSX Temporary fix -> commit immediately so page is accessible.
+	// Correct OSX mmap sequence TODO which would correlate Linux (mmap) and Windows (VirtualAlloc) logic
+	MmapCommitPtr(ret, size, PageProtectionMode().All(true));
+	return ret;
+#else
 	return mmap(base, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+#endif
 }
 
 bool HostSys::MmapCommitPtr(void* base, size_t size, const PageProtectionMode& mode)

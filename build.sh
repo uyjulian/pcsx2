@@ -23,6 +23,15 @@ useClang=0
 # 0 => no, 1 => yes, 2 => force yes
 useCross=2
 
+# TODO OSX use sw_vers -productName
+if [[ $(uname -s) == 'Darwin' ]]; then
+    ncpu=$(sysctl -n hw.ncpu)
+    toolfile=cmake/darwin-compiler-i386-clang.cmake
+else
+    ncpu=$(grep -w -c processor /proc/cpuinfo)
+    toolfile=cmake/linux-compiler-i386-multilib.cmake
+fi
+
 for ARG in "$@"; do
     case "$ARG" in
         --clean             ) cleanBuild=1 ;;
@@ -39,7 +48,7 @@ for ARG in "$@"; do
         --wx28              ) flags+=(-DWX28_API=TRUE) ;;
         --gtk3              ) flags+=(-DGTK3_API=TRUE) ;;
         --no-simd           ) flags+=(-DDISABLE_ADVANCE_SIMD=TRUE) ;;
-        --cross-multilib    ) flags+=(-DCMAKE_TOOLCHAIN_FILE=cmake/linux-compiler-i386-multilib.cmake); useCross=1; ;;
+        --cross-multilib    ) flags+=(-DCMAKE_TOOLCHAIN_FILE=$toolfile); useCross=1; ;;
         --no-cross-multilib ) useCross=0; ;;
         -D*                 ) flags+=($ARG) ;;
 
@@ -83,7 +92,7 @@ fi
 
 if [[ "$useCross" -eq 2 ]] && [[ "$(getconf LONG_BIT 2> /dev/null)" != 32 ]]; then
     echo "Forcing cross compilation."
-    flags+=(-DCMAKE_TOOLCHAIN_FILE=cmake/linux-compiler-i386-multilib.cmake)
+    flags+=(-DCMAKE_TOOLCHAIN_FILE=$toolfile)
 elif [[ "$useCross" -ne 1 ]]; then
     useCross=0
 fi
@@ -108,12 +117,6 @@ if [[ "$useClang" -eq 1 ]]; then
     fi
 else
     cmake "${flags[@]}" $root 2>&1 | tee -a $log
-fi
-
-if [[ $(uname -s) == 'Darwin' ]]; then
-    ncpu=$(sysctl -n hw.ncpu)
-else
-    ncpu=$(grep -w -c processor /proc/cpuinfo)
 fi
 
 make -j"$ncpu" 2>&1 | tee -a $log

@@ -45,15 +45,13 @@ set(spu2xSources
     RegTable.cpp
     Reverb.cpp
     SndOut.cpp
-    SndOut_Portaudio.cpp
-    SndOut_SDL.cpp
     spu2freeze.cpp
     Spu2replay.cpp
     spu2sys.cpp
     Timestretcher.cpp
     Wavedump_wav.cpp
     WavFile.cpp
-    )
+)
 
 # spu2x headers
 set(spu2xHeaders
@@ -73,51 +71,105 @@ set(spu2xHeaders
     WavFile.h
 )
 
+# Backend selection
+if (PORTAUDIO_FOUND)
+	set(spu2xAudioBackendSources
+		${spu2xAudioBackendSources}
+		SndOut_Portaudio.cpp
+	)
+	set(spu2xAudioBackendLibs
+		${spu2xAudioBackendLibs}
+		${PORTAUDIO_LIBRARIES}
+	)
+	set(spu2xFinalFlags ${spu2xFinalFlags} -DPORTAUDIO)
+endif()
 
-# spu2x Linux sources
-set(spu2xLinuxSources
-    Linux/AboutBox.cpp
-    Linux/Alsa.cpp
-    Linux/CfgHelpers.cpp
-    Linux/Config.cpp
-    Linux/ConfigDebug.cpp
-    Linux/ConfigSoundTouch.cpp
-    Linux/Dialogs.cpp)
+if (ALSA_FOUND)
+	set(spu2xAudioBackendSources
+		${spu2xAudioBackendSources}
+		Linux/Alsa.cpp
+	)
+	set(spu2xAudioBackendLibs
+		${spu2xAudioBackendLibs}
+		${ALSA_LIBRARIES}
+	)
+	set(spu2xFinalFlags ${spu2xFinalFlags} -DALSA)
+endif()
 
-# spu2x Linux headers
-set(spu2xLinuxHeaders
-    Linux/Alsa.h
-    Linux/Config.h
-    Linux/Dialogs.h)
+if (SDLn_FOUND)
+	set(spu2xAudioBackendSources
+		${spu2xAudioBackendSources}
+		SndOut_SDL.cpp
+	)
+	if(SDL2_API)
+		set(spu2xAudioBackendLibs
+			${spu2xAudioBackendLibs}
+			${SDL2_LIBRARIES}
+		)
+	elseif(SDL_LIBRARY)
+		set(spu2xAudioBackendLibs
+			${spu2xAudioBackendLibs}
+			${SDL_LIBRARY}
+		)
+	endif()
+	set(spu2xFinalFlags ${spu2xFinalFlags} -DSDL)
+endif()
 
-# add additional include directories
-include_directories(Linux)
+if(GTKn_FOUND)
+	# spu2x Linux (GTK) sources
+	set(spu2xInterfaceSources
+		Linux/AboutBox.cpp
+		Linux/CfgHelpers.cpp
+		Linux/Config.cpp
+		Linux/ConfigDebug.cpp
+		Linux/ConfigSoundTouch.cpp
+		Linux/Dialogs.cpp
+	)
+
+	# spu2x Linux (GTK) headers
+	set(spu2xInterfaceHeaders
+		Linux/Alsa.h
+		Linux/Config.h
+		Linux/Dialogs.h
+	)
+
+	# add additional include directories
+	include_directories(Linux)	
+else()
+	# spu2x Wx (OSX/etc) sources
+	set(spu2xInterfaceSources
+		Linux/AboutBox.cpp
+		Linux/CfgHelpers.cpp
+		Wx/Config.cpp
+		Wx/ConfigDebug.cpp
+		Wx/ConfigSoundTouch.cpp
+		Wx/Dialogs.cpp
+	)
+
+	# spu2x Wx (OSX/etc) headers
+	set(spu2xInterfaceHeaders
+		Wx/Config.h
+		Linux/Dialogs.h
+	)
+	
+	# add additional include directories
+	include_directories(Wx)
+	include_directories(Linux)
+endif()
 
 set(spu2xFinalSources
     ${spu2xSources}
     ${spu2xHeaders}
-    ${spu2xLinuxSources}
-    ${spu2xLinuxHeaders}
+    ${spu2xInterfaceSources}
+    ${spu2xInterfaceHeaders}
+    ${spu2xAudioBackendSources}
 )
 
-set(spu2xFinalLibs
+set(spu2xFinalLibs	
     Utilities_NO_TLS
-    ${ALSA_LIBRARIES}
-    ${PORTAUDIO_LIBRARIES}
     ${GTK2_LIBRARIES}
     ${SOUNDTOUCH_LIBRARIES}
+    ${spu2xAudioBackendLibs}
 )
-
-if (SDL2_API)
-    set(spu2xFinalLibs
-        ${spu2xFinalLibs}
-        ${SDL2_LIBRARIES}
-    )
-else()
-    set(spu2xFinalLibs
-        ${spu2xFinalLibs}
-        ${SDL_LIBRARY}
-    )
-endif()
 
 add_pcsx2_plugin(${Output} "${spu2xFinalSources}" "${spu2xFinalLibs}" "${spu2xFinalFlags}")

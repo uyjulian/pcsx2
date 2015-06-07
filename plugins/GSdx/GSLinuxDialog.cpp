@@ -21,6 +21,7 @@
 
 #include "stdafx.h"
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include "GSdx.h"
 #include "GSLinuxLogo.h"
 #include "GSSetting.h"

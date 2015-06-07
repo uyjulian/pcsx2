@@ -45,12 +45,10 @@ static HRESULT s_hr = E_FAIL;
 #else
 
 #include "GSWndOGL.h"
+#include "GSWndSDLGL.h"
 #include "GSWndEGL.h"
 
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
-
-extern bool RunLinuxDialog();
+extern bool RunDialog();
 
 #endif
 
@@ -305,6 +303,7 @@ static int _GSopen(void** dsp, char* title, int renderer, int threads = -1)
 			wnd[1] = NULL;
 #endif
 #endif
+#endif
 		}
 	}
 	catch(std::exception& ex)
@@ -330,7 +329,7 @@ static int _GSopen(void** dsp, char* title, int renderer, int threads = -1)
 		int w = theApp.GetConfig("ModeWidth", 0);
 		int h = theApp.GetConfig("ModeHeight", 0);
 
-#ifdef __linux__
+#ifdef __POSIX__
 		for(uint32 i = 0; i < 2; i++) {
 			try
 			{
@@ -373,7 +372,7 @@ static int _GSopen(void** dsp, char* title, int renderer, int threads = -1)
 	{
 		s_gs->SetMultithreaded(true);
 
-#ifdef __linux__
+#ifdef __POSIX__
 		if (s_gs->m_wnd) {
 			// A window was already attached to s_gs so we also
 			// need to restore the window state (Attach)
@@ -435,7 +434,7 @@ static int _GSopen(void** dsp, char* title, int renderer, int threads = -1)
 
 EXPORT_C_(int) GSopen2(void** dsp, uint32 flags)
 {
-#ifdef __linux__
+#ifdef __POSIX__
 	// Use ogl renderer as default otherwise it crash at startup
 	// GSRenderOGL only GSDeviceOGL (not GSDeviceNULL)
 	int renderer = theApp.GetConfig("renderer", 12);
@@ -460,7 +459,7 @@ EXPORT_C_(int) GSopen2(void** dsp, uint32 flags)
 		}
 
 #endif
-#ifdef __linux__
+#ifdef __POSIX__
 		switch(renderer) {
 			case 13: renderer = 12; break; // OGL: SW to HW
 			case 12: renderer = 13; break; // OGL: HW to SW
@@ -755,7 +754,7 @@ EXPORT_C GSconfigure()
 
 #else
 
-		if (RunLinuxDialog()) {
+		if (RunDialog()) {
 			theApp.ReloadConfig();
 		}
 

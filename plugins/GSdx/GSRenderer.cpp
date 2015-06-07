@@ -546,6 +546,7 @@ void GSRenderer::EndCapture()
 	m_capture.EndCapture();
 }
 
+// TODO OSX implement me
 void GSRenderer::KeyEvent(GSKeyEventData* e)
 {
 	const unsigned int interlace_nb = 8;

@@ -380,7 +380,12 @@ bool wxAppWithHelpers::ProcessEvent( wxEvent& evt )
 	// struct, and posting the event would require a temporary clone, where changes would
 	// be lost).
 
+#ifdef __APPLE__
+	if (!wxThread::IsMain())
+		printf("TODO OSX FixME DARWIN\n");
+#else
 	AffinityAssert_AllowFrom_MainUI();
+#endif
 	return _parent::ProcessEvent( evt );
 }
 

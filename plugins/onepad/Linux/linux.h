@@ -21,6 +21,15 @@
 
 #ifndef __LINUX_H__
 #define __LINUX_H__
-extern void DisplayDialog();
-extern string KeyName(int pad, int key, int keysym = 0);
+
+#include "onepad.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/keysym.h>
+
+// TODO soft reference.. bind this totype returned by wxWindow -> GetHandle()
+extern Display *GSdsp;
+extern Window GSwin;
+
 #endif

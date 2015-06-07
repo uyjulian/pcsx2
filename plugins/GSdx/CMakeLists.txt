@@ -89,7 +89,6 @@ set(GSdxSources
     GSDrawScanlineCodeGenerator.x64.avx.cpp
     GSDump.cpp
     GSFunctionMap.cpp
-    GSLinuxDialog.cpp
     GSLocalMemory.cpp
 	GSLzma.cpp
     GSPerfMon.cpp
@@ -124,8 +123,6 @@ set(GSdxSources
     GSVector.cpp
     GSVertexTrace.cpp
     GSWnd.cpp
-    GSWndOGL.cpp
-    GSWndEGL.cpp
     GSdx.cpp
     stdafx.cpp
     )
@@ -158,8 +155,7 @@ set(GSdxHeaders
     GSDrawingContext.h
     GSDrawingEnvironment.h
     GSDump.h
-    GSFunctionMap.h
-    GSLinuxLogo.h
+    GSFunctionMap.h    
     GSLocalMemory.h
     GSPerfMon.h
     GSRasterizer.h
@@ -187,8 +183,6 @@ set(GSdxHeaders
     GSVertexSW.h
     GSVertexTrace.h
     GSWnd.h
-    GSWndOGL.h
-    GSWndEGL.h
     GSdx.h
     res/glsl_source.h
     stdafx.h

@@ -52,6 +52,20 @@ if(CMAKE_BUILD_TYPE STREQUAL Release)
 	)
 endif(CMAKE_BUILD_TYPE STREQUAL Release)
 
+if(APPLE)
+	LIST(APPEND UtilitiesSources
+		Darwin/DarwinThreads.cpp
+		Darwin/DarwinMisc.cpp
+		Darwin/DarwinSemaphore.cpp
+	)
+else()
+	LIST(APPEND UtilitiesSources
+		Linux/LnxThreads.cpp
+		Linux/LnxMisc.cpp
+		Semaphore.cpp
+	)
+endif()
+
 # variable with all sources of this library
 set(UtilitiesSources
 	AlignedMalloc.cpp
@@ -67,8 +81,6 @@ set(UtilitiesSources
 	HashTools.cpp
 	IniInterface.cpp
 	Linux/LnxHostSys.cpp
-	Linux/LnxMisc.cpp
-	Linux/LnxThreads.cpp
 	Mutex.cpp
 	PathUtils.cpp
 	PrecompiledHeader.cpp
@@ -78,7 +90,6 @@ set(UtilitiesSources
 	pxStreams.cpp
 	pxTranslate.cpp
 	pxWindowTextWriter.cpp
-	Semaphore.cpp
 	StringHelpers.cpp
 	ThreadingDialogs.cpp
 	ThreadTools.cpp
@@ -130,7 +141,7 @@ set(UtilitiesFinalSources
 )
 
 set(UtilitiesFinalLibs
-    ${LIBC_LIBRARIES} # Gold (new linux linker) does not get automatically dependency of dependency
+	${LIBC_LIBRARIES} # Gold (new linux linker) does not get automatically dependency of dependency
 	${wxWidgets_LIBRARIES}
 )
 

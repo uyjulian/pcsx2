@@ -20,12 +20,10 @@
  */
 
 #include <string.h>
-#include <gtk/gtk.h>
 
 #include "joystick.h"
 #include "keyboard.h"
 #include "onepad.h"
-#include "linux.h"
 
 extern std::string s_strIniPath;
 
@@ -46,7 +44,7 @@ string KeyName(int pad, int key, int keysym)
 			}
 		} else {
 			// keyboard
-			char* pstr = XKeysymToString(keysym);
+            const char* pstr = PlatformKeysymToString(keysym);
 			if (pstr != NULL) tmp = pstr;
 		}
 	} else {
@@ -96,24 +94,6 @@ string KeyName(int pad, int key, int keysym)
 	}
 
 	return tmp;
-}
-
-void DefaultKeyboardValues()
-{
-	set_keyboad_key(0, XK_a, PAD_L2);
-	set_keyboad_key(0, XK_semicolon, PAD_R2);
-	set_keyboad_key(0, XK_w, PAD_L1);
-	set_keyboad_key(0, XK_p, PAD_R1);
-	set_keyboad_key(0, XK_i, PAD_TRIANGLE);
-	set_keyboad_key(0, XK_l, PAD_CIRCLE);
-	set_keyboad_key(0, XK_k, PAD_CROSS);
-	set_keyboad_key(0, XK_j, PAD_SQUARE);
-	set_keyboad_key(0, XK_v, PAD_SELECT);
-	set_keyboad_key(0, XK_n, PAD_START);
-	set_keyboad_key(0, XK_e, PAD_UP);
-	set_keyboad_key(0, XK_f, PAD_RIGHT);
-	set_keyboad_key(0, XK_d, PAD_DOWN);
-	set_keyboad_key(0, XK_s, PAD_LEFT);
 }
 
 void SaveConfig()

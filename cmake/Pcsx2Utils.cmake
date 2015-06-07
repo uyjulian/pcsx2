@@ -97,7 +97,14 @@ endmacro(append_flags)
 
 macro(add_pcsx2_plugin lib srcs libs flags)
     include_directories(.)
-    add_library(${lib} MODULE ${srcs})
+
+    # TODO OSX do we want to use .so libs on OSX or .dylib? http://www.cmake.org/pipermail/cmake/2011-September/046098.html
+    if(APPLE)
+        #CMAKE_SHARED_MODULE_SUFFIX
+        add_library(${lib} SHARED ${srcs})
+    else()
+        add_library(${lib} MODULE ${srcs})
+    endif()
     target_link_libraries(${lib} ${libs})
     append_flags(${lib} "${flags}")
     if(NOT USER_CMAKE_LD_FLAGS STREQUAL "")

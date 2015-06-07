@@ -36,10 +36,12 @@
 #define APIENTRYP APIENTRY *
 #endif
 
+#ifndef NO_EXTRA_ARB
 // Allow compilation with older mesa
 #ifndef GL_VERSION_4_3
 #define GL_VERSION_4_3 1
 typedef void (APIENTRYP PFNGLDEBUGMESSAGECALLBACKPROC) (GLDEBUGPROC callback, const void *userParam);
+#endif
 #endif
 
 #ifndef GL_ARB_copy_image
@@ -214,8 +216,13 @@ extern   PFNGLBINDBUFFERBASEPROC                gl_BindBufferBase;
 extern   PFNGLBINDFRAMEBUFFERPROC               gl_BindFramebuffer;
 extern   PFNGLBINDSAMPLERPROC                   gl_BindSampler;
 extern   PFNGLBINDVERTEXARRAYPROC               gl_BindVertexArray;
+#ifdef __APPLE_CHECK_THIS__ // TODO OSX not on APPLE, really?
+extern   PFNGLBLENDEQUATIONSEPARATEIPROC     gl_BlendEquationSeparateiARB;
+extern   PFNGLBLENDFUNCSEPARATEIPROC         gl_BlendFuncSeparateiARB;
+#else
 extern   PFNGLBLENDEQUATIONSEPARATEIARBPROC     gl_BlendEquationSeparateiARB;
 extern   PFNGLBLENDFUNCSEPARATEIARBPROC         gl_BlendFuncSeparateiARB;
+#endif
 extern   PFNGLBLITFRAMEBUFFERPROC               gl_BlitFramebuffer;
 extern   PFNGLBUFFERDATAPROC                    gl_BufferData;
 extern   PFNGLCHECKFRAMEBUFFERSTATUSPROC        gl_CheckFramebufferStatus;
@@ -244,8 +251,7 @@ extern   PFNGLGENFRAMEBUFFERSPROC               gl_GenFramebuffers;
 extern   PFNGLGENSAMPLERSPROC                   gl_GenSamplers;
 extern   PFNGLGENVERTEXARRAYSPROC               gl_GenVertexArrays;
 extern   PFNGLGETBUFFERPARAMETERIVPROC          gl_GetBufferParameteriv;
-extern   PFNGLGETDEBUGMESSAGELOGARBPROC         gl_GetDebugMessageLogARB;
-extern   PFNGLDEBUGMESSAGECALLBACKPROC          gl_DebugMessageCallback;
+
 extern   PFNGLGETPROGRAMINFOLOGPROC             gl_GetProgramInfoLog;
 extern   PFNGLGETPROGRAMIVPROC                  gl_GetProgramiv;
 extern   PFNGLGETSHADERIVPROC                   gl_GetShaderiv;
@@ -282,8 +288,7 @@ extern   PFNGLUSEPROGRAMPROC                    gl_UseProgram;
 extern   PFNGLGETSHADERINFOLOGPROC              gl_GetShaderInfoLog;
 extern   PFNGLPROGRAMUNIFORM1IPROC              gl_ProgramUniform1i;
 // GL4.2
-extern   PFNGLBINDIMAGETEXTUREPROC              gl_BindImageTexture;
-extern   PFNGLMEMORYBARRIERPROC                 gl_MemoryBarrier;
+
 extern   PFNGLTEXSTORAGE2DPROC                  gl_TexStorage2D;
 extern   PFNGLPOPDEBUGGROUPPROC                 gl_PopDebugGroup;
 // GL4.3

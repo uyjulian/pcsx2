@@ -49,6 +49,18 @@
 #include <gtk/gtk.h>
 #endif
 
+#ifdef __WXMAC__
+// Great joy....
+#undef EBP
+#undef ESP
+#undef EDI
+#undef ESI
+#undef EDX
+#undef EAX
+#undef EBX
+#undef ECX
+#include <wx/osx/private.h>		// needed to implement the app!
+#endif
 
 IMPLEMENT_APP(Pcsx2App)
 
@@ -238,6 +250,8 @@ void Pcsx2App::PadKeyDispatch( const keyEvent& ev )
 
 #ifdef __WXMSW__
 	const int vkey = wxCharCodeMSWToWX( ev.key );	//returns 0 if plain ascii value or a WXK_... (<=32 or >=300) if a special key
+#elif defined( __WXMAC__ )
+	const int vkey = wxCharCodeWXToOSX( (wxKeyCode) ev.key );
 #elif defined( __WXGTK__ )
 	const int vkey = TranslateGDKtoWXK( ev.key );
 #else
@@ -340,7 +354,7 @@ void pxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 
 wxMessageOutput* Pcsx2AppTraits::CreateMessageOutput()
 {
-#ifdef __UNIX__
+#ifdef __POSIX__
 	return _parent::CreateMessageOutput();
 #else
 	return new pxMessageOutputMessageBox;
@@ -359,7 +373,7 @@ public:
 		return Path::Combine( GetDataDir(), L"Langs" );
 	}
 
-#ifdef __linux__
+#ifdef __POSIX__
 	wxString GetUserLocalDataDir() const
 	{
 		// I got memory corruption inside wxGetEnv when I heavily toggle the GS renderer (F9). It seems wxGetEnv

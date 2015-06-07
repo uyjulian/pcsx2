@@ -31,9 +31,9 @@ else()
     list(APPEND wxWidgets_CONFIG_OPTIONS --version=3.0)
 endif()
 
-if(GTK3_API)
+if(GTK3_API AND NOT APPLE)
     list(APPEND wxWidgets_CONFIG_OPTIONS --toolkit=gtk3)
-else()
+elseif(NOT APPLE)
     list(APPEND wxWidgets_CONFIG_OPTIONS --toolkit=gtk2)
 endif()
 
@@ -58,7 +58,8 @@ else()
     endif()
 endif()
 
-find_package(wxWidgets COMPONENTS base core adv)
+#On OSX we use gl component of wxwidgets also. If dependency not desired on Linux, if() below
+find_package(wxWidgets COMPONENTS base core adv gl)
 find_package(ZLIB)
 
 ## Use pcsx2 package to find module
@@ -68,8 +69,11 @@ include(FindLibc)
 
 ## Use CheckLib package to find module
 include(CheckLib)
-if(Linux)
-    check_lib(AIO aio libaio.h)
+if(APPLE)
+    # OSX has POSIX AIO builtin to its Libc, header: /usr/include/aio.h
+    set(AIO_FOUND 1)
+else()
+    check_lib(AIO aio aio.h)
 endif()
 check_lib(EGL EGL EGL/egl.h)
 check_lib(PORTAUDIO portaudio portaudio.h pa_linux_alsa.h)

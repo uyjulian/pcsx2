@@ -46,7 +46,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL Release)
 endif()
 
 if(XDG_STD)
-    set(pcsx2FinalFlags
+	set(pcsx2FinalFlags
 		${pcsx2FinalFlags}
 		-DXDG_STD
 	)
@@ -66,7 +66,7 @@ set(pcsx2Sources
 	FiFo.cpp
 	FPU.cpp
 	Gif.cpp
-    Gif_Logger.cpp
+	Gif_Logger.cpp
 	Gif_Unit.cpp
 	GS.cpp
 	GSState.cpp
@@ -85,9 +85,9 @@ set(pcsx2Sources
 	Memory.cpp
 	MMI.cpp
 	MTGS.cpp
-    MTVU.cpp
-    MultipartFileReader.cpp
-    OutputIsoFile.cpp
+	MTVU.cpp
+	MultipartFileReader.cpp
+	OutputIsoFile.cpp
 	Patch.cpp
 	Patch_Memory.cpp
 	Pcsx2Config.cpp
@@ -152,7 +152,7 @@ set(pcsx2Headers
 	IopMem.h
 	IopSio2.h
 #	Mdec.h
-    MTVU.h
+	MTVU.h
 	Memory.h
 	MemoryTypes.h
 	NakedAsm.h
@@ -399,8 +399,13 @@ set(pcsx2IPUHeaders
 # Linux sources
 set(pcsx2LinuxSources
 	Linux/LnxKeyCodes.cpp
-    Linux/LnxFlatFileReader.cpp
-    )
+	Linux/LnxFlatFileReader.cpp
+	)
+
+set(pcsx2OSXSources
+#	Linux/LnxKeyCodes.cpp
+	Darwin/DarwinFlatFileReader.cpp
+	)
 
 # Linux headers
 set(pcsx2LinuxHeaders
@@ -460,12 +465,12 @@ set(pcsx2UtilitiesHeaders
 
 # Zip tools utilies sources
 set(pcsx2ZipToolsSources
-    ZipTools/thread_gzip.cpp
-    ZipTools/thread_lzma.cpp)
+	ZipTools/thread_gzip.cpp
+	ZipTools/thread_lzma.cpp)
 
 # Zip tools utilies headers
 set(pcsx2ZipToolsHeaders
-    ZipTools/ThreadedZipTools.h)
+	ZipTools/ThreadedZipTools.h)
 
 
 # Windows sources
@@ -588,7 +593,7 @@ set(Common
 	${pcsx2CDVDHeaders}
 	${pcsx2DebugToolsSources}
 	${pcsx2GuiSources}
-    ${pcsx2GuiResources}
+	${pcsx2GuiResources}
 	${pcsx2GuiHeaders}
 	${pcsx2IPUSources}
 	${pcsx2IPUHeaders}
@@ -620,9 +625,10 @@ if(Windows)
 endif()
 
 # MacOSX
-if(MacOSX)
+if(APPLE)
 	set(Platform
-		)
+		${pcsx2OSXSources}
+		${pcsx2LinuxHeaders})
 endif()
 
 set(pcsx2FinalSources
@@ -636,14 +642,14 @@ set(pcsx2FinalLibs
 	${wxWidgets_LIBRARIES}
 	${GTK2_LIBRARIES}
 	${ZLIB_LIBRARIES}
-    ${AIO_LIBRARIES}
+	${AIO_LIBRARIES}
 )
 
 # additonal include directories
 include_directories(
 					gui
 					x86
-                    ${CMAKE_BINARY_DIR}/pcsx2/gui
+					${CMAKE_BINARY_DIR}/pcsx2/gui
 )
 
 ### Generate the resources files

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "Pcsx2Defs.h"
+
 extern bool DebugEnabled;
 
 extern bool _MsgToConsole;
@@ -83,7 +85,7 @@ extern u32 OutputModule;
 extern int SndOutLatencyMS;
 extern int SynchMode;
 
-#ifndef __linux__
+#ifndef __POSIX__
 extern wchar_t dspPlugin[];
 extern int  dspPluginModule;
 

@@ -118,7 +118,7 @@ extern void MOVZX32M8toR( x86IntRegType to, u32 from );
 extern void MOVZX32R16toR( x86IntRegType to, x86IntRegType from );
 extern void MOVZX32Rm16toR( x86IntRegType to, x86IntRegType from, int offset=0 );
 // movzx m16 to r32
-extern void MOVZX32M16toR( x86IntRegType to, u32 from );
+extern void MOVZX32M16toR( x86IntRegType to, uptr from );
 
 // cmovbe r32 to r32
 extern void CMOVBE32RtoR( x86IntRegType to, x86IntRegType from );
@@ -282,12 +282,12 @@ extern void DEC16M( u32 to );
 // mul eax by r32 to edx:eax
 extern void MUL32R( x86IntRegType from );
 // mul eax by m32 to edx:eax
-extern void MUL32M( u32 from );
+extern void MUL32M( uptr from );
 
 // imul eax by r32 to edx:eax
 extern void IMUL32R( x86IntRegType from );
 // imul eax by m32 to edx:eax
-extern void IMUL32M( u32 from );
+extern void IMUL32M( uptr from );
 // imul r32 by r32 to r32
 extern void IMUL32RtoR( x86IntRegType to, x86IntRegType from );
 
@@ -634,15 +634,12 @@ extern void SETZ8R( x86IntRegType to );
 // sete r8
 extern void SETE8R( x86IntRegType to );
 
-// push imm32
-extern void PUSH32I( u32 from );
-
 // push r32
 extern void PUSH32R( x86IntRegType from );
 // push m32
 extern void PUSH32M( u32 from );
 // push imm32
-extern void PUSH32I( u32 from );
+extern void PUSH32I( uptr from );
 // pop r32
 extern void POP32R( x86IntRegType from );
 // pushad
@@ -935,7 +932,7 @@ extern void SSE_MOVUPS_M128_to_XMM( x86SSERegType to, uptr from );
 extern void SSE_MOVUPS_XMM_to_M128( uptr to, x86SSERegType from );
 
 extern void SSE_MOVSS_M32_to_XMM( x86SSERegType to, uptr from );
-extern void SSE_MOVSS_XMM_to_M32( u32 to, x86SSERegType from );
+extern void SSE_MOVSS_XMM_to_M32( uptr to, x86SSERegType from );
 extern void SSE_MOVSS_XMM_to_Rm( x86IntRegType to, x86SSERegType from );
 extern void SSE_MOVSS_XMM_to_XMM( x86SSERegType to, x86SSERegType from );
 extern void SSE_MOVSS_Rm_to_XMM( x86SSERegType to, x86IntRegType from, int offset=0 );
@@ -944,12 +941,12 @@ extern void SSE_MOVSS_XMM_to_Rm( x86IntRegType to, x86SSERegType from, int offse
 extern void SSE_MASKMOVDQU_XMM_to_XMM( x86SSERegType to, x86SSERegType from );
 
 extern void SSE_MOVLPS_M64_to_XMM( x86SSERegType to, uptr from );
-extern void SSE_MOVLPS_XMM_to_M64( u32 to, x86SSERegType from );
+extern void SSE_MOVLPS_XMM_to_M64( uptr to, x86SSERegType from );
 extern void SSE_MOVLPS_Rm_to_XMM( x86SSERegType to, x86IntRegType from, int offset=0 );
 extern void SSE_MOVLPS_XMM_to_Rm( x86IntRegType to, x86SSERegType from, int offset=0 );
 
 extern void SSE_MOVHPS_M64_to_XMM( x86SSERegType to, uptr from );
-extern void SSE_MOVHPS_XMM_to_M64( u32 to, x86SSERegType from );
+extern void SSE_MOVHPS_XMM_to_M64( uptr to, x86SSERegType from );
 extern void SSE_MOVHPS_Rm_to_XMM( x86SSERegType to, x86IntRegType from, int offset=0 );
 extern void SSE_MOVHPS_XMM_to_Rm( x86IntRegType to, x86SSERegType from, int offset=0 );
 
@@ -1297,7 +1294,7 @@ extern void SSE2_PCMPEQD_M128_to_XMM(x86SSERegType to, uptr from );
 extern void SSE2_MOVD_M32_to_XMM( x86SSERegType to, uptr from );
 extern void SSE2_MOVD_R_to_XMM( x86SSERegType to, x86IntRegType from );
 extern void SSE2_MOVD_Rm_to_XMM( x86SSERegType to, x86IntRegType from, int offset=0 );
-extern void SSE2_MOVD_XMM_to_M32( u32 to, x86SSERegType from );
+extern void SSE2_MOVD_XMM_to_M32( uptr to, x86SSERegType from );
 extern void SSE2_MOVD_XMM_to_R( x86IntRegType to, x86SSERegType from );
 extern void SSE2_MOVD_XMM_to_Rm( x86IntRegType to, x86SSERegType from, int offset=0 );
 
@@ -1307,7 +1304,7 @@ extern void SSE2_MOVQ_XMM_to_R( x86IntRegType to, x86SSERegType from );
 extern void SSE2_MOVQ_R_to_XMM( x86SSERegType to, x86IntRegType from );
 extern void SSE2_MOVQ_M64_to_XMM( x86SSERegType to, uptr from );
 extern void SSE2_MOVQ_XMM_to_XMM( x86SSERegType to, x86SSERegType from );
-extern void SSE2_MOVQ_XMM_to_M64( u32 to, x86SSERegType from );
+extern void SSE2_MOVQ_XMM_to_M64( uptr to, x86SSERegType from );
 
 //**********************************************************************************/
 //MOVD: Move Qword(64bit) to/from MMX/XMM reg                                      *

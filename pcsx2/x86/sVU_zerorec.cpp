@@ -903,7 +903,7 @@ static VuFunctionHeader* SuperVURecompileProgram(u32 startpc, int vuindex)
 		s_pFnHeader->ranges.push_back(r);
 	}
 
-#if defined(PCSX2_DEBUG) && defined(__linux__)
+#if defined(PCSX2_DEBUG) && defined(__POSIX__)
 	// dump at the end to capture the actual code
 	if ((s_vu && (vudump&1)) || (!s_vu && (vudump&16))) SuperVUDumpBlock(s_listBlocks, s_vu);
 #endif

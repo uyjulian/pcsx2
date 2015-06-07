@@ -101,8 +101,7 @@ void GSWndGL::PopulateGlFunction()
 	*(void**)&(gl_GetShaderInfoLog) = GetProcAddress("glGetShaderInfoLog");
 	*(void**)&(gl_LinkProgram) = GetProcAddress("glLinkProgram");
 	// GL4.2
-	*(void**)&(gl_BindImageTexture) = GetProcAddress("glBindImageTexture", true);
-	*(void**)&(gl_MemoryBarrier) = GetProcAddress("glMemoryBarrier", true);
+
 	*(void**)&(gl_TexStorage2D) = GetProcAddress("glTexStorage2D");
 	// GL4.3
 	*(void**)&(gl_CopyImageSubData) = GetProcAddress("glCopyImageSubData", true);
@@ -155,4 +154,5 @@ void GSWndGL::PopulateGlFunction()
 	if (gl_CreateFramebuffers == NULL) {
 		Emulate_DSA::Init();
 	}
+
 }

@@ -22,7 +22,7 @@
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
 
-#ifdef __linux__
+#ifdef __POSIX__
 #define MAX_KEYS 24
 #else
 #define MAX_KEYS 20
@@ -37,7 +37,7 @@ enum KeyType
 };
 
 extern void set_keyboad_key(int pad, int keysym, int index);
-extern int get_keyboard_key(int pad, int keysym);
+extern int get_keyboard_key(int pad, u32 key);
 extern void set_key(int pad, int index, int value);
 extern int get_key(int pad, int index);
 extern bool IsAnalogKey(int index);

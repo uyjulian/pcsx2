@@ -164,4 +164,5 @@ class JoystickInfo
 extern int s_selectedpad;
 extern vector<JoystickInfo*> s_vjoysticks;
 extern bool JoystickIdWithinBounds(int joyid);
+void PollForJoystickInput(int cpad);
 #endif
